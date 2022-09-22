@@ -1,3 +1,5 @@
+package clases;
+
 public class Cliente {
 
     private int idCliente;

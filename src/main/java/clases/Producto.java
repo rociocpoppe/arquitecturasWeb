@@ -1,3 +1,5 @@
+package clases;
+
 public class Producto {
 
     private int idProducto;
