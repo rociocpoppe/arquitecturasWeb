@@ -11,6 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+
 public class ClienteDao implements DAO<Cliente> {
 
     private static final String MYSQL_DB = "mysql";
@@ -47,20 +50,37 @@ public class ClienteDao implements DAO<Cliente> {
 	}
 
 	@Override
-	public void insertarDatos(Cliente cliente, String db) throws SQLException {
-		int idCliente = cliente.getIdCliente();
-		String nombre = cliente.getNombre();
-		String email = cliente.getEmail();
-
+	public void parserDatos(CSVParser clientes, String db) throws SQLException {
 		switch (db) {
-		case MYSQL_DB:
-			this.conn = MySqlDB.crearConeccion();
-			break;
-
-		case DERBY_DB:
-			this.conn = DerbyDB.crearConeccion();
-			break;
+			case MYSQL_DB:
+				this.conn = MySqlDB.crearConeccion();
+				break;
+	
+			case DERBY_DB:
+				this.conn = DerbyDB.crearConeccion();
+				break;
+			}
+	
+		for(CSVRecord row: clientes) {
+			int idCliente=0;
+			String nombre="";
+			String email="";
+			System.out.println("rooow" +row);
+			idCliente = Integer.parseInt(row.get(idCliente));
+			System.out.println("idCliente "+idCliente);
+			nombre = row.get("nombre");
+			System.out.println(nombre);
+			email = row.get("email");
+			insertarCliente(idCliente, nombre, email);
 		}
+		conn.commit();
+		this.conn.close();
+	}
+
+
+	private void insertarCliente(int idCliente, String nombre, String email) throws SQLException{
+		
+		System.out.println( "insertar " + " " +idCliente + " "+nombre+ " "+email);
 		String insert = "INSERT INTO cliente (idCliente, nombre, email) VALUES(?,?,?)";
 		PreparedStatement ps = conn.prepareStatement(insert);
 		ps.setInt(1, idCliente);
@@ -68,8 +88,6 @@ public class ClienteDao implements DAO<Cliente> {
 		ps.setString(3, email);
 		ps.executeUpdate();
 		ps.close();
-		conn.commit();
-		this.conn.close();
 	}
 
 	public ArrayList<Cliente> listaDeClientes(String db) throws SQLException {

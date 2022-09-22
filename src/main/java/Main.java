@@ -1,13 +1,24 @@
+import java.io.FileReader;
 import java.sql.SQLException;
 
+import java.io.FileNotFoundException;
+
+import java.io.IOException;
+
+import java.util.ArrayList;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
 import clasesDAO.ClienteDao;
 import factory.DAOFactory;
+import org.apache.commons.csv.CSVParser;
+import java.io.BufferedReader;
 
 public class Main {
 
     private static ClienteDao clienteDb1;
 	private static ClienteDao clienteDb2;
-    public static void main(String[] args) throws SQLException{
+    public static void main(String[] args) throws SQLException, FileNotFoundException, IOException{
 
 		
             String db1 = "mysql";
@@ -15,6 +26,9 @@ public class Main {
             
             DAOFactory dbElegida1 = DAOFactory.getDAOFactory(db1);
             clienteDb1=dbElegida1.getClienteDAO(db1);
+            //CSVReader reader=new CSVReader(csvFile);
+            CSVParser parser = CSVFormat.DEFAULT.withHeader().parse(new FileReader("src/main/java/csv/clientes.csv"));
+            clienteDb1.parserDatos(parser, db1);
 
             // mascotaDAO1 = dbElegida1.getMascotaDAO(db1);
             // Mascota mascota1 = new Mascota(1, "Roky", "perro");
