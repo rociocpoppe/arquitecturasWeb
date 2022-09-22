@@ -1,18 +1,19 @@
 import java.io.FileReader;
 import java.sql.SQLException;
-
+import java.util.ArrayList;
 import java.io.FileNotFoundException;
 
 import java.io.IOException;
 
-import java.util.ArrayList;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
+
+import clases.Cliente;
 import clasesDAO.ClienteDao;
 import factory.DAOFactory;
-import org.apache.commons.csv.CSVParser;
-import java.io.BufferedReader;
+import interfaces.DAO;
+
 
 public class Main {
 
@@ -23,29 +24,21 @@ public class Main {
 		
             String db1 = "mysql";
             String db2 = "derby";
+            CSVParser parserClientes = CSVFormat.DEFAULT.withHeader().parse(new FileReader("src/main/java/csv/clientes.csv"));
             
-            DAOFactory dbElegida1 = DAOFactory.getDAOFactory(db1);
-            clienteDb1=dbElegida1.getClienteDAO(db1);
-            //CSVReader reader=new CSVReader(csvFile);
-            CSVParser parser = CSVFormat.DEFAULT.withHeader().parse(new FileReader("src/main/java/csv/clientes.csv"));
-            clienteDb1.parserDatos(parser, db1);
+            // DAOFactory dbElegida1 = DAOFactory.getDAOFactory(db1);
+            // clienteDb1=dbElegida1.getClienteDAO(db1);
+            // clienteDb1.parserDatos(parserClientes, db1);
+            // System.out.println("Clientes db " + db1 + " " + clienteDb1.listaDeClientes(db1));
 
-            // mascotaDAO1 = dbElegida1.getMascotaDAO(db1);
-            // Mascota mascota1 = new Mascota(1, "Roky", "perro");
-            // Mascota mascota2 = new Mascota(2, "Gato Blanco", "gato");
-            // mascotaDAO1.crearTabla(db1);
-            // mascotaDAO1.insertarDatos(mascota1,db1);
-            // mascotaDAO1.insertarDatos(mascota2,db1);
-            // System.out.println(mascotaDAO1.listaDeMascotas(db1));
+            DAOFactory dbElegida2=DAOFactory.getDAOFactory(db2);
+            clienteDb2=dbElegida2.getClienteDAO(db2);
+            clienteDb2.parserDatos(parserClientes, db2);
+            System.out.println("Clientes db " + db2 + " " + clienteDb2.listaDeClientes(db2));
+        
             
-            // CreadorDAOs dbElegida2 = CreadorDAOs.getDAOFactory(db2);
-            // mascotaDAO2 = dbElegida2.getMascotaDAO(db2);
-            // Mascota mascota3 = new Mascota(3, "Darwin", "perro");
-            // Mascota mascota4 = new Mascota(4, "Ceni", "gato");
-            // mascotaDAO2.crearTabla(db2);
-            // mascotaDAO2.insertarDatos(mascota3,db2);
-            // mascotaDAO2.insertarDatos(mascota4,db2);
-            // System.out.println(mascotaDAO2.listaDeMascotas(db2));
+
+ 
         }
     
     

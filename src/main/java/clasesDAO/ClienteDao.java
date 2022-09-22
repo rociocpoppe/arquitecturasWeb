@@ -30,6 +30,9 @@ public class ClienteDao implements DAO<Cliente> {
 		switch (db) {
 		case MYSQL_DB:
 			this.conn = MySqlDB.crearConeccion();
+			String eliminarTablaMySql= "DROP  TABLE cliente";
+			conn.prepareStatement(eliminarTablaMySql).execute();
+			conn.commit();
 			String clienteMYSQL = "CREATE TABLE IF NOT EXISTS cliente(" + "idCliente INT," + "nombre VARCHAR(500),"
 					+ "email VARCHAR(150)," + "PRIMARY KEY(idCliente))";
 			this.conn.prepareStatement(clienteMYSQL).execute();
@@ -38,10 +41,10 @@ public class ClienteDao implements DAO<Cliente> {
 			break;
 		case DERBY_DB:
 			this.conn = DerbyDB.crearConeccion();
-			// String dropTableInDerby= "DROP  TABLE mascota";
-			// conn.prepareStatement(dropTableInDerby).execute();
-			//   conn.commit();
-			String clienteDerby = "CREATE TABLE IF NOT EXISTS cliente(" + "idCliente INT," + "nombre VARCHAR(500),"
+			String eliminarTablaDerby= "DROP  TABLE cliente";
+			conn.prepareStatement(eliminarTablaDerby).execute();
+			conn.commit();
+			String clienteDerby = "CREATE TABLE cliente(" + "idCliente INT," + "nombre VARCHAR(500),"
             + "email VARCHAR(150)," + "PRIMARY KEY(idCliente))";
 			conn.prepareStatement(clienteDerby).execute();
 			conn.commit();
@@ -65,11 +68,8 @@ public class ClienteDao implements DAO<Cliente> {
 			int idCliente=0;
 			String nombre="";
 			String email="";
-			System.out.println("rooow" +row);
 			idCliente = Integer.parseInt(row.get(idCliente));
-			System.out.println("idCliente "+idCliente);
 			nombre = row.get("nombre");
-			System.out.println(nombre);
 			email = row.get("email");
 			insertarCliente(idCliente, nombre, email);
 		}
@@ -79,8 +79,6 @@ public class ClienteDao implements DAO<Cliente> {
 
 
 	private void insertarCliente(int idCliente, String nombre, String email) throws SQLException{
-		
-		System.out.println( "insertar " + " " +idCliente + " "+nombre+ " "+email);
 		String insert = "INSERT INTO cliente (idCliente, nombre, email) VALUES(?,?,?)";
 		PreparedStatement ps = conn.prepareStatement(insert);
 		ps.setInt(1, idCliente);

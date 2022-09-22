@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Thu Sep 22 20:20:03 ART 2022:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.15.2.0 - (1873585): instance a816c00e-0183-6780-459a-00000edd27e0 
+on database directory /home/rocio/Escritorio/Entregable1/MyDerbyDb with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@55054057 
+Loaded from file:/home/rocio/.m2/repository/org/apache/derby/derby/10.15.2.0/derby-10.15.2.0.jar
+java.vendor=Ubuntu
+java.runtime.version=11.0.11+9-Ubuntu-0ubuntu2.20.04
+user.dir=/home/rocio/Escritorio/Entregable1
+os.name=Linux
+os.arch=amd64
+os.version=5.11.0-37-generic
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
