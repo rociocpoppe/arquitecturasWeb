@@ -40,9 +40,9 @@ public class ProductoDao implements DAO <ProductoDao>{
 			break;
 		case DERBY_DB:
 			this.conn = DerbyDB.crearConeccion();
-			// String eliminarTablaDerby= "DROP  TABLE producto";
-			// conn.prepareStatement(eliminarTablaDerby).execute();
-			// conn.commit();
+			String eliminarTablaDerby= "DROP  TABLE producto";
+			conn.prepareStatement(eliminarTablaDerby).execute();
+			conn.commit();
 			String clienteDerby =  "CREATE TABLE producto(" + "idProducto INT," + "nombre VARCHAR(45),"
             + "valor FLOAT," + "PRIMARY KEY(idProducto))";
 			conn.prepareStatement(clienteDerby).execute();
@@ -65,24 +65,24 @@ public class ProductoDao implements DAO <ProductoDao>{
 	
 		for(CSVRecord row: productos) {
 			int idProducto=0;
-			String nombre="";
-			int valor=0;
+			String name="";
+			float valor=0;
 			idProducto = Integer.parseInt(row.get(idProducto));
-			nombre = row.get("nombre");
-			valor =Integer.parseInt(row.get(valor));
-			insertarCliente(idProducto, nombre, valor);
+			name = row.get("nombre");
+			valor =Float.parseFloat(row.get("valor"));
+			insertarCliente(idProducto, name, valor);
 		}
 		conn.commit();
 		this.conn.close();
 	}
 
 
-	private void insertarCliente(int idProducto, String nombre, int valor) throws SQLException{
+	private void insertarCliente(int idProducto, String nombre, float valor) throws SQLException{
 		String insert = "INSERT INTO producto (idProducto, nombre, valor) VALUES(?,?,?)";
 		PreparedStatement ps = conn.prepareStatement(insert);
 		ps.setInt(1, idProducto);
 		ps.setString(2, nombre);
-		ps.setInt(3, valor);
+		ps.setFloat(3, valor);
 		ps.executeUpdate();
 		ps.close();
 	}

@@ -38,22 +38,22 @@ public class Main {
             CSVParser parserClientes = CSVFormat.DEFAULT.withHeader().parse(new FileReader("src/main/java/csv/clientes.csv"));
             CSVParser parserFacturas = CSVFormat.DEFAULT.withHeader().parse(new FileReader("src/main/java/csv/facturas.csv"));
             CSVParser parserFactura_producto = CSVFormat.DEFAULT.withHeader().parse(new FileReader("src/main/java/csv/facturas-productos.csv"));
-            CSVParser parserProducto = CSVFormat.DEFAULT.withHeader().parse(new FileReader("src/main/java/csv/clientes.csv"));
+            CSVParser parserProducto = CSVFormat.DEFAULT.withHeader().parse(new FileReader("src/main/java/csv/productos.csv"));
             
             DAOFactory dbElegida1 = DAOFactory.getDAOFactory(db1);
             // clienteDb1=dbElegida1.getClienteDAO(db1);
             // clienteDb1.parserDatos(parserClientes, db1);
             // System.out.println("Clientes db " + db1 + " " + clienteDb1.listaDeClientes(db1));
-            ProductoDb1=dbElegida1.getProductoDAO(db1);
-            ProductoDb1.parserDatos(parserProducto, db1);
-            System.out.println(" Productos db "+ db1 + ProductoDb1.listaDeProductos(db1));
-            //DAOFactory dbElegida2=DAOFactory.getDAOFactory(db2);
+            // ProductoDb1=dbElegida1.getProductoDAO(db1);
+            // ProductoDb1.parserDatos(parserProducto, db1);
+            // System.out.println(" Productos db "+ db1 + ProductoDb1.listaDeProductos(db1));
+            DAOFactory dbElegida2=DAOFactory.getDAOFactory(db2);
             // clienteDb2=dbElegida2.getClienteDAO(db2);
             // clienteDb2.parserDatos(parserClientes, db2);
             // System.out.println("Clientes db " + db2 + " " + clienteDb2.listaDeClientes(db2));
-            // ProductoDb2=dbElegida2.getProductoDAO(db2);
-            // ProductoDb2.parserDatos(parserProducto, db2);
-            // System.out.println(" Productos db "+ db2 + ProductoDb2.listaDeProductos(db2));
+            ProductoDb2=dbElegida2.getProductoDAO(db2);
+            ProductoDb2.parserDatos(parserProducto, db2);
+            System.out.println(" Productos db "+ db2 + ProductoDb2.listaDeProductos(db2));
 
  
         }
