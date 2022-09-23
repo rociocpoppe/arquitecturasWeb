@@ -3,13 +3,19 @@ package factory;
 import java.sql.SQLException;
 
 import clasesDAO.ClienteDao;
+import clasesDAO.FacturaDao;
+import clasesDAO.Factura_ProductoDao;
+import clasesDAO.ProductoDao;
 
 public abstract class DAOFactory {
 
     public static final String MYSQL_DB = "mysql";
 	public static final String DERBY_DB = "derby";
 	
-	public abstract ClienteDao getClienteDAO(String db) throws SQLException;	
+	public abstract ClienteDao getClienteDAO(String db) throws SQLException;
+	public abstract FacturaDao getFacturaDAO(String db) throws SQLException;
+	public abstract ProductoDao getProductoDAO(String db) throws SQLException;
+	public abstract Factura_ProductoDao getFactura_ProductoDAO(String db) throws SQLException;
 	
 	//Patron Singleton mysql
 	private static DAOFactory db_mysql =null;	

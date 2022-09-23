@@ -6,6 +6,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import clasesDAO.ClienteDao;
+import clasesDAO.FacturaDao;
+import clasesDAO.Factura_ProductoDao;
+import clasesDAO.ProductoDao;
 
 public class DerbyDB extends DAOFactory {
 
@@ -42,6 +45,21 @@ public class DerbyDB extends DAOFactory {
 	@Override
 	public ClienteDao getClienteDAO(String db) throws SQLException {
 		return new ClienteDao(db);
+	}
+
+	@Override
+	public FacturaDao getFacturaDAO(String db) throws SQLException {
+		return new FacturaDao(db);
+	}
+
+	@Override
+	public ProductoDao getProductoDAO(String db) throws SQLException {
+		return new ProductoDao(db);
+	}
+
+	@Override
+	public Factura_ProductoDao getFactura_ProductoDAO(String db) throws SQLException {
+		return new Factura_ProductoDao(db);
 	}
 
 }
