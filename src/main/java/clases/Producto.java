@@ -6,6 +6,11 @@ public class Producto {
     private String nombre;
     private float valor;
 
+
+    
+    public Producto() {
+    }
+
     public Producto(int idProducto, String nombre, float valor) {
         this.idProducto = idProducto;
         this.nombre = nombre;

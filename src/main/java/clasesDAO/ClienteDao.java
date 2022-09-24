@@ -104,25 +104,49 @@ public class ClienteDao implements DAO<Cliente> {
 		ps.close();
 	}
 
-	public ArrayList<Cliente> listaDeClientes(String db) throws SQLException {
+	public ArrayList<Cliente> listaDeClientesOrdenada(String db) throws SQLException {
 		ArrayList<Cliente> clientes = new ArrayList<Cliente>();
 		switch (db) {
 		case MYSQL_DB:
 			this.conn = MySqlDB.crearConeccion();
-			break;
+			String select = "SELECT c.*, SUM( p.valor * fp.cantidad) as sumaTotal" 
+						+" FROM cliente c JOIN factura f ON (c.idCliente = f.idCliente)"
+						+" JOIN factura_producto fp ON (f.idFactura=fp.idFactura)"
+						+" JOIN producto p ON (fp.idProducto=p.idProducto)"
+						+" WHERE c.idCliente= f.idCliente AND f.idFactura=fp.idFactura "
+						+" GROUP BY idCliente"
+						+" ORDER BY `sumaTotal` DESC";
+			PreparedStatement ps = conn.prepareStatement(select);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Cliente cliente = new Cliente(rs.getInt(1), rs.getString(2), rs.getString(3));
+				clientes.add(cliente);
+			}
+			this.conn.commit();
+			ps.close();
+				break;
 		case DERBY_DB:
 			this.conn = DerbyDB.crearConeccion();
+			String selectDerby = " SELECT c.*, SUM( p.valor * fp.cantidad) as sumaTotal"
+								+ " FROM cliente c JOIN factura f ON (c.idCliente = f.idCliente)"
+								+ " JOIN factura_producto fp ON (f.idFactura=fp.idFactura)"
+			    				+ " JOIN producto p ON (fp.idProducto=p.idProducto)"
+								+ " WHERE c.idCliente= f.idCliente AND f.idFactura=fp.idFactura"
+								+ " GROUP BY c.idCliente, c.NOMBRE, c.email"
+								+ " ORDER BY sumaTotal DESC";
+			
+			PreparedStatement psDby = conn.prepareStatement(selectDerby);
+			ResultSet rsDby = psDby.executeQuery();
+			while (rsDby.next()) {
+				Cliente cliente = new Cliente(rsDby.getInt(1), rsDby.getString(2), rsDby.getString(3));
+				clientes.add(cliente);
+			}
+			this.conn.commit();
+			psDby.close();
 			break;
 		}
-		String select = "SELECT * FROM cliente";
-		PreparedStatement ps = conn.prepareStatement(select);
-		ResultSet rs = ps.executeQuery();
-		while (rs.next()) {
-			Cliente cliente = new Cliente(rs.getInt(1), rs.getString(2), rs.getString(3));
-			clientes.add(cliente);
-		}
-		this.conn.commit();
-		ps.close();
+		
+		
 
         //que pasa con derby???
 		this.conn.close();

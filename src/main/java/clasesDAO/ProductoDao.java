@@ -100,29 +100,48 @@ public class ProductoDao implements DAO <ProductoDao>{
 		ps.close();
 	}
 
-	public ArrayList<Producto> listaDeProductos(String db) throws SQLException {
-		ArrayList<Producto> productos = new ArrayList<Producto>();
+	public Producto obtenerProductoConMasRecaudacion(String db) throws SQLException {
+		Producto producto= new Producto();
 		switch (db) {
 		case MYSQL_DB:
 			this.conn = MySqlDB.crearConeccion();
-			break;
-		case DERBY_DB:
-			this.conn = DerbyDB.crearConeccion();
-			break;
-		}
-		String select = "SELECT * FROM producto";
+			String select = "SELECT p.*, SUM(p.valor * fp.cantidad) as sumaTotal "
+						+ "FROM producto p JOIN factura_producto fp ON (p.idProducto = fp.idProducto)" 
+						+ "WHERE p.idProducto = fp.idProducto "
+						+ "GROUP BY idProducto "
+						+ "ORDER BY `sumaTotal` DESC LIMIT 1 ";
 		PreparedStatement ps = conn.prepareStatement(select);
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
-			Producto producto = new Producto(rs.getInt(1), rs.getString(2), rs.getInt(3));
-			productos.add(producto);
+			producto = new Producto(rs.getInt(1), rs.getString(2), rs.getInt(3));
+			
 		}
 		this.conn.commit();
 		ps.close();
 
+			break;
+		case DERBY_DB:
+			this.conn = DerbyDB.crearConeccion();
+			String selectDby = "SELECT p.*, SUM(p.valor * fp.cantidad) as sumaTotal"
+			+ " FROM producto p JOIN factura_producto fp ON (p.idProducto = fp.idProducto)"
+			+ " WHERE p.idProducto = fp.idProducto"
+			  + " GROUP BY p.IDPRODUCTO, p.NOMBRE, p.valor"
+			  +" ORDER BY sumaTotal ASC";
+
+			PreparedStatement psDby = conn.prepareStatement(selectDby);
+			ResultSet rsDby = psDby.executeQuery();
+			while (rsDby.next()) {
+			producto = new Producto(rsDby.getInt(1), rsDby.getString(2), rsDby.getInt(3));
+			
+			}
+			this.conn.commit();
+			psDby.close();
+			break;
+		}
+		
         //que pasa con derby???
 		this.conn.close();
 
-		return productos;
+		return producto;
 	}
 }
