@@ -113,7 +113,7 @@ public class Factura_ProductoDao implements DAO<Factura_ProductoDao> {
 		this.conn.commit();
 		ps.close();
 
-        //que pasa con derby???
+    
 		this.conn.close();
 
 		return facturas_producto;

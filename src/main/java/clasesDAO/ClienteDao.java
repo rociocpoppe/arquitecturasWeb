@@ -146,9 +146,7 @@ public class ClienteDao implements DAO<Cliente> {
 			break;
 		}
 		
-		
-
-        //que pasa con derby???
+	
 		this.conn.close();
 
 		return clientes;

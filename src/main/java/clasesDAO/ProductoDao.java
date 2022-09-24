@@ -139,7 +139,6 @@ public class ProductoDao implements DAO <ProductoDao>{
 			break;
 		}
 		
-        //que pasa con derby???
 		this.conn.close();
 
 		return producto;
