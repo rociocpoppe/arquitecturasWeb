@@ -43,15 +43,16 @@ public class Factura_ProductoDao implements DAO<Factura_ProductoDao> {
 			break;
 		case DERBY_DB:
 			this.conn = DerbyDB.crearConeccion();
-			String eliminarTablaDerby= "DROP  TABLE factura_producto";
-			conn.prepareStatement(eliminarTablaDerby).execute();
+			String eliminarTabla= "DROP  TABLE factura_producto";
+			conn.prepareStatement(eliminarTabla).execute();
 			conn.commit();
 			String clienteDerby = "CREATE TABLE factura_producto(" + "idFactura INT," + "idProducto INT,"
-            + "cantidad INT," + "CONSTRAINT PK_Factura_Producto PRIMARY KEY (idFactura,idProducto),"
-			+"FOREIGN KEY(idFactura) references factura(idFactura),"
-			+"FOREIGN KEY(idProducto) references producto(idProducto))";
+			+ "cantidad INT," + "CONSTRAINT PK_Factura_Producto PRIMARY KEY (idFactura,idProducto),"
+			+"CONSTRAINT Factura_Producto_Producto FOREIGN KEY (idProducto) REFERENCES producto (idProducto) ON DELETE CASCADE,"
+			+"CONSTRAINT Factura_Producto_factura FOREIGN KEY (idFactura) REFERENCES factura (idFactura) ON DELETE CASCADE)";
 			conn.prepareStatement(clienteDerby).execute();
 			conn.commit();
+			System.out.println("success tabla factura_producto");
 			break;
 		}
 	}

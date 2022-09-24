@@ -50,16 +50,20 @@ public class ClienteDao implements DAO<Cliente> {
 			break;
 		case DERBY_DB:
 			this.conn = DerbyDB.crearConeccion();
-			String eliminarTablaDerby= "DROP  TABLE cliente";
-			conn.prepareStatement(eliminarTablaDerby).execute();
+			String eliminarConstraintD="ALTER TABLE factura DROP FOREIGN KEY Factura_ClienteFK";
+			conn.prepareStatement(eliminarConstraintD).execute();
+			conn.commit();
+			String eliminarTabla= "DROP TABLE cliente";
+			conn.prepareStatement(eliminarTabla).execute();
 			conn.commit();
 			String clienteDerby = "CREATE TABLE cliente(" 
 								+ "idCliente INT," 
 								+ "nombre VARCHAR(500),"
             					+ "email VARCHAR(150)," 
-								+ "CONSTRAINT idCliente_PK PRIMARY KEY(idCliente))";
+								+ "CONSTRAINT PK_Cliente PRIMARY KEY (idCliente))";
 			conn.prepareStatement(clienteDerby).execute();
 			conn.commit();
+			System.out.println("success tabla cliente");
 			break;
 		}
 	}

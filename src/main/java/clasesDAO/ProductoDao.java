@@ -46,6 +46,9 @@ public class ProductoDao implements DAO <ProductoDao>{
 			break;
 		case DERBY_DB:
 			this.conn = DerbyDB.crearConeccion();
+			String eliminarConstraintd="ALTER TABLE factura_producto DROP FOREIGN KEY Factura_Producto_Producto";
+			conn.prepareStatement(eliminarConstraintd).execute();
+			conn.commit();
 			String eliminarTablaDerby= "DROP  TABLE producto";
 			conn.prepareStatement(eliminarTablaDerby).execute();
 			conn.commit();
@@ -56,6 +59,7 @@ public class ProductoDao implements DAO <ProductoDao>{
 								+ "CONSTRAINT PK_Producto PRIMARY KEY (idProducto))";
 			conn.prepareStatement(clienteDerby).execute();
 			conn.commit();
+			System.out.println("success tabla producto");
 			break;
 		}
 	}

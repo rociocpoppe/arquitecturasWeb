@@ -48,6 +48,9 @@ public class FacturaDao implements DAO <FacturaDao>{
 			break;
 		case DERBY_DB:
 			this.conn = DerbyDB.crearConeccion();
+			String eliminarConstraintD="ALTER TABLE factura_producto DROP FOREIGN KEY Factura_Producto_Factura";
+			conn.prepareStatement(eliminarConstraintD).execute();
+			conn.commit();
 			String eliminarTablaDerby= "DROP  TABLE factura";
 			conn.prepareStatement(eliminarTablaDerby).execute();
 			conn.commit();
@@ -55,10 +58,10 @@ public class FacturaDao implements DAO <FacturaDao>{
 								+ "idFactura INT," 
 								+ "idCliente INT,"
 								+ "CONSTRAINT PK_Factura PRIMARY KEY (idFactura),"
-								+ "CONSTRAINT Factura_Cliente_FK"
-								+ " FOREIGN KEY (idCliente) REFERENCES cliente (idCliente))";
+								+ "CONSTRAINT Factura_ClienteFK FOREIGN KEY (idCliente) REFERENCES cliente (idCliente) ON DELETE CASCADE)";
 			conn.prepareStatement(clienteDerby).execute();
 			conn.commit();
+			System.out.println("success tabla factura");
 			break;
 		}
 	}
