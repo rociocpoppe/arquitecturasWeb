@@ -31,11 +31,17 @@ public class FacturaDao implements DAO <FacturaDao>{
 		switch (db) {
 		case MYSQL_DB:
 			this.conn = MySqlDB.crearConeccion();
-			String eliminarTablaMySql= "DROP  TABLE factura";
+			String eliminarConstraint="ALTER TABLE factura_producto DROP FOREIGN KEY Factura_Producto_Factura";
+			conn.prepareStatement(eliminarConstraint).execute();
+			conn.commit();
+			String eliminarTablaMySql= "DROP  TABLE  IF EXISTS factura";
 			conn.prepareStatement(eliminarTablaMySql).execute();
 			conn.commit();
-			String clienteMYSQL = "CREATE TABLE IF NOT EXISTS factura(" + "idFactura INT," + "idCliente INT,"
-                                 + "PRIMARY KEY(idFactura))";
+			String clienteMYSQL = "CREATE TABLE IF NOT EXISTS factura(" 
+								+ "idFactura INT," 
+								+ "idCliente INT,"
+								+ "CONSTRAINT PK_Factura PRIMARY KEY (idFactura),"
+								+ "CONSTRAINT Factura_ClienteFK FOREIGN KEY (idCliente) REFERENCES cliente (idCliente) ON DELETE CASCADE)";
 			this.conn.prepareStatement(clienteMYSQL).execute();
 			this.conn.commit();
 			this.conn.close();
@@ -45,8 +51,12 @@ public class FacturaDao implements DAO <FacturaDao>{
 			String eliminarTablaDerby= "DROP  TABLE factura";
 			conn.prepareStatement(eliminarTablaDerby).execute();
 			conn.commit();
-			String clienteDerby = "CREATE TABLE factura(" + "idFactura INT," + "idCliente INT,"
-            + "PRIMARY KEY(idFactura))";
+			String clienteDerby = "CREATE TABLE factura(" 
+								+ "idFactura INT," 
+								+ "idCliente INT,"
+								+ "CONSTRAINT PK_Factura PRIMARY KEY (idFactura),"
+								+ "CONSTRAINT Factura_Cliente_FK"
+								+ " FOREIGN KEY (idCliente) REFERENCES cliente (idCliente))";
 			conn.prepareStatement(clienteDerby).execute();
 			conn.commit();
 			break;
@@ -68,17 +78,17 @@ public class FacturaDao implements DAO <FacturaDao>{
 		for(CSVRecord row: facturas) {
 			int idFactura=0;
             int idCliente=0;
-			idFactura=Integer.parseInt(row.get(idFactura));
-			idCliente = Integer.parseInt(row.get(idCliente));
-			insertarCliente(idFactura, idCliente);
+			idFactura=Integer.parseInt(row.get("idFactura"));
+			idCliente = Integer.parseInt(row.get("idCliente"));
+			insertarFactura(idFactura, idCliente);
 		}
 		conn.commit();
 		this.conn.close();
 	}
 
 
-	private void insertarCliente(int idFactura, int idCliente) throws SQLException{
-		String insert = "INSERT INTO cliente (idFactura, idCliente) VALUES(?,?)";
+	private void insertarFactura(int idFactura, int idCliente) throws SQLException{
+		String insert = "INSERT INTO factura (idFactura, idCliente) VALUES(?,?)";
 		PreparedStatement ps = conn.prepareStatement(insert);
 		ps.setInt(1, idFactura);
 		ps.setInt(2, idCliente);
@@ -100,7 +110,7 @@ public class FacturaDao implements DAO <FacturaDao>{
 		PreparedStatement ps = conn.prepareStatement(select);
 		ResultSet rs = ps.executeQuery();
 		while (rs.next()) {
-			Factura factura = new Factura(rs.getInt(1), rs.getInt(2));
+			Factura factura = new Factura(rs.getInt(1),rs.getInt(2));
 			facturas.add(factura);
 		}
 		this.conn.commit();

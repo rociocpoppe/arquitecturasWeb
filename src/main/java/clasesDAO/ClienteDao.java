@@ -29,12 +29,21 @@ public class ClienteDao implements DAO<Cliente> {
 	public void crearTabla(String db) throws SQLException {
 		switch (db) {
 		case MYSQL_DB:
-			this.conn = MySqlDB.crearConeccion();
-			String eliminarTablaMySql= "DROP  TABLE cliente";
+			 this.conn = MySqlDB.crearConeccion();
+			String eliminarConstraint="ALTER TABLE factura DROP FOREIGN KEY Factura_ClienteFK";
+			conn.prepareStatement(eliminarConstraint).execute();
+			conn.commit();
+			// conn.prepareStatement(eliminarConstraint).execute();
+			// conn.commit();
+			String eliminarTablaMySql= "DROP TABLE IF EXISTS cliente";
 			conn.prepareStatement(eliminarTablaMySql).execute();
 			conn.commit();
-			String clienteMYSQL = "CREATE TABLE IF NOT EXISTS cliente(" + "idCliente INT," + "nombre VARCHAR(500),"
-					+ "email VARCHAR(150)," + "PRIMARY KEY(idCliente))";
+			String clienteMYSQL = 
+								"CREATE TABLE IF NOT EXISTS cliente(" 
+								+ "idCliente INT NOT NULL," 
+								+ "nombre VARCHAR(500),"
+								+ "email VARCHAR(150)," 
+								+ "CONSTRAINT PK_Cliente PRIMARY KEY (idCliente))";
 			this.conn.prepareStatement(clienteMYSQL).execute();
 			this.conn.commit();
 			this.conn.close();
@@ -44,8 +53,11 @@ public class ClienteDao implements DAO<Cliente> {
 			String eliminarTablaDerby= "DROP  TABLE cliente";
 			conn.prepareStatement(eliminarTablaDerby).execute();
 			conn.commit();
-			String clienteDerby = "CREATE TABLE cliente(" + "idCliente INT," + "nombre VARCHAR(500),"
-            + "email VARCHAR(150)," + "PRIMARY KEY(idCliente))";
+			String clienteDerby = "CREATE TABLE cliente(" 
+								+ "idCliente INT," 
+								+ "nombre VARCHAR(500),"
+            					+ "email VARCHAR(150)," 
+								+ "CONSTRAINT idCliente_PK PRIMARY KEY(idCliente))";
 			conn.prepareStatement(clienteDerby).execute();
 			conn.commit();
 			break;

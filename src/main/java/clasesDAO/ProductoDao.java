@@ -29,11 +29,17 @@ public class ProductoDao implements DAO <ProductoDao>{
 		switch (db) {
 		case MYSQL_DB:
 			this.conn = MySqlDB.crearConeccion();
-			String eliminarTablaMySql= "DROP  TABLE producto";
+			String eliminarConstraint="ALTER TABLE factura_producto DROP FOREIGN KEY Factura_Producto_Producto";
+			conn.prepareStatement(eliminarConstraint).execute();
+			conn.commit();
+			String eliminarTablaMySql= "DROP  TABLE IF EXISTS producto";
 			conn.prepareStatement(eliminarTablaMySql).execute();
 			conn.commit();
-			String clienteMYSQL = "CREATE TABLE IF NOT EXISTS producto(" + "idProducto INT," + "nombre VARCHAR(45),"
-					+ "valor FLOAT," + "PRIMARY KEY(idProducto))";
+			String clienteMYSQL = "CREATE TABLE IF NOT EXISTS producto(" 
+								+ "idProducto INT," 
+								+ "nombre VARCHAR(45),"
+								+ "valor FLOAT," 
+								+ "CONSTRAINT PK_Producto PRIMARY KEY (idProducto))";
 			this.conn.prepareStatement(clienteMYSQL).execute();
 			this.conn.commit();
 			this.conn.close();
@@ -43,8 +49,11 @@ public class ProductoDao implements DAO <ProductoDao>{
 			String eliminarTablaDerby= "DROP  TABLE producto";
 			conn.prepareStatement(eliminarTablaDerby).execute();
 			conn.commit();
-			String clienteDerby =  "CREATE TABLE producto(" + "idProducto INT," + "nombre VARCHAR(45),"
-            + "valor FLOAT," + "PRIMARY KEY(idProducto))";
+			String clienteDerby =  "CREATE TABLE producto(" 
+								+ "idProducto INT," 
+								+ "nombre VARCHAR(45),"
+            					+ "valor FLOAT," 
+								+ "CONSTRAINT PK_Producto PRIMARY KEY (idProducto))";
 			conn.prepareStatement(clienteDerby).execute();
 			conn.commit();
 			break;
@@ -67,17 +76,17 @@ public class ProductoDao implements DAO <ProductoDao>{
 			int idProducto=0;
 			String name="";
 			float valor=0;
-			idProducto = Integer.parseInt(row.get(idProducto));
+			idProducto = Integer.parseInt(row.get("idProducto"));
 			name = row.get("nombre");
 			valor =Float.parseFloat(row.get("valor"));
-			insertarCliente(idProducto, name, valor);
+			insertarProducto(idProducto, name, valor);
 		}
 		conn.commit();
 		this.conn.close();
 	}
 
 
-	private void insertarCliente(int idProducto, String nombre, float valor) throws SQLException{
+	private void insertarProducto(int idProducto, String nombre, float valor) throws SQLException{
 		String insert = "INSERT INTO producto (idProducto, nombre, valor) VALUES(?,?,?)";
 		PreparedStatement ps = conn.prepareStatement(insert);
 		ps.setInt(1, idProducto);
