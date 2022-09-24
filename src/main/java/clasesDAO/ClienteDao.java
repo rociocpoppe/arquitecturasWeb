@@ -33,8 +33,6 @@ public class ClienteDao implements DAO<Cliente> {
 			String eliminarConstraint="ALTER TABLE factura DROP FOREIGN KEY Factura_ClienteFK";
 			conn.prepareStatement(eliminarConstraint).execute();
 			conn.commit();
-			// conn.prepareStatement(eliminarConstraint).execute();
-			// conn.commit();
 			String eliminarTablaMySql= "DROP TABLE IF EXISTS cliente";
 			conn.prepareStatement(eliminarTablaMySql).execute();
 			conn.commit();
