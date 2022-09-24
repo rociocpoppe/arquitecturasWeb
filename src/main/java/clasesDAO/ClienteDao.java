@@ -22,20 +22,49 @@ public class ClienteDao implements DAO<Cliente> {
 	private Connection conn;
 
 	public ClienteDao(String db) throws SQLException {
-		this.crearTabla(db);
+		if(!existeTabla(db)){
+			this.crearTabla(db);
+		}	
+	}
+
+	private boolean existeTabla(String db) throws SQLException {
+		boolean cumple=false;
+		switch (db) {
+			case MYSQL_DB:
+				this.conn = MySqlDB.crearConeccion();
+				String existe="SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'mysqlEntregable' AND TABLE_NAME = 'cliente'";
+				PreparedStatement ps = conn.prepareStatement(existe);
+				ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				String aux = rs.getString(3);
+				if(aux=="cliente"){
+					cumple= true;
+				}
+			}
+				conn.commit();
+				this.conn.close();
+			break;
+			case DERBY_DB:
+				this.conn = MySqlDB.crearConeccion();
+				java.sql.DatabaseMetaData dbmd = this.conn.getMetaData();
+				ResultSet rs1 = dbmd.getTables(null, null, "producto",null);
+				if(rs1.next())
+				{
+					cumple=true;
+				}
+				
+				conn.commit();
+				this.conn.close();
+			break;
+		}
+		return cumple;
 	}
 
 	@Override
 	public void crearTabla(String db) throws SQLException {
 		switch (db) {
 		case MYSQL_DB:
-			 this.conn = MySqlDB.crearConeccion();
-			String eliminarConstraint="ALTER TABLE factura DROP FOREIGN KEY Factura_ClienteFK";
-			conn.prepareStatement(eliminarConstraint).execute();
-			conn.commit();
-			String eliminarTablaMySql= "DROP TABLE IF EXISTS cliente";
-			conn.prepareStatement(eliminarTablaMySql).execute();
-			conn.commit();
+			this.conn = MySqlDB.crearConeccion();
 			String clienteMYSQL = 
 								"CREATE TABLE IF NOT EXISTS cliente(" 
 								+ "idCliente INT NOT NULL," 
@@ -48,12 +77,6 @@ public class ClienteDao implements DAO<Cliente> {
 			break;
 		case DERBY_DB:
 			this.conn = DerbyDB.crearConeccion();
-			String eliminarConstraintD="ALTER TABLE factura DROP FOREIGN KEY Factura_ClienteFK";
-			conn.prepareStatement(eliminarConstraintD).execute();
-			conn.commit();
-			String eliminarTabla= "DROP TABLE cliente";
-			conn.prepareStatement(eliminarTabla).execute();
-			conn.commit();
 			String clienteDerby = "CREATE TABLE cliente(" 
 								+ "idCliente INT," 
 								+ "nombre VARCHAR(500),"
