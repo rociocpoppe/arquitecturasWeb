@@ -47,7 +47,7 @@ public class ProductoDao implements DAO <ProductoDao>{
 				this.conn.close();
 			break;
 			case DERBY_DB:
-				this.conn = MySqlDB.crearConeccion();
+				this.conn = DerbyDB.crearConeccion();
 				java.sql.DatabaseMetaData dbmd = this.conn.getMetaData();
 				ResultSet rs1 = dbmd.getTables(null, null, "producto",null);
 				if(rs1.next())
@@ -138,15 +138,14 @@ public class ProductoDao implements DAO <ProductoDao>{
 						+ "WHERE p.idProducto = fp.idProducto "
 						+ "GROUP BY idProducto "
 						+ "ORDER BY `sumaTotal` DESC LIMIT 1 ";
-		PreparedStatement ps = conn.prepareStatement(select);
-		ResultSet rs = ps.executeQuery();
-		while (rs.next()) {
-			producto = new Producto(rs.getInt(1), rs.getString(2), rs.getInt(3));
-			
-		}
-		this.conn.commit();
-		ps.close();
-
+			PreparedStatement ps = conn.prepareStatement(select);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				producto = new Producto(rs.getInt(1), rs.getString(2), rs.getInt(3));
+				
+			}
+			this.conn.commit();
+			ps.close();
 			break;
 		case DERBY_DB:
 			this.conn = DerbyDB.crearConeccion();

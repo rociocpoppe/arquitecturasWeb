@@ -20,7 +20,7 @@ public class MySqlDB extends DAOFactory{
 	Connection conn = null;
 	
 	public MySqlDB() {
-		this.registrarDriver();
+		registrarDriver();
 	}
 	
 	

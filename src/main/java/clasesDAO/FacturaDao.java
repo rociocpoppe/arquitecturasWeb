@@ -47,7 +47,7 @@ public class FacturaDao implements DAO <FacturaDao>{
 				this.conn.close();
 			break;
 			case DERBY_DB:
-				this.conn = MySqlDB.crearConeccion();
+				this.conn = DerbyDB.crearConeccion();
 				java.sql.DatabaseMetaData dbmd = this.conn.getMetaData();
 				ResultSet rs1 = dbmd.getTables(null, null, "producto",null);
 				if(rs1.next())
@@ -143,8 +143,6 @@ public class FacturaDao implements DAO <FacturaDao>{
 		}
 		this.conn.commit();
 		ps.close();
-
-        //que pasa con derby???
 		this.conn.close();
 
 		return facturas;

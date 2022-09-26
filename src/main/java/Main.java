@@ -41,9 +41,10 @@ public class Main {
             CSVParser parserProducto = CSVFormat.DEFAULT.withHeader().parse(new FileReader("src/main/java/csv/productos.csv"));
             
 
+            DAOFactory dbElegida1 = DAOFactory.getDAOFactory(db1);
+
             //se crean las tablas
 
-            DAOFactory dbElegida1 = DAOFactory.getDAOFactory(db1);
             ClienteDb1=dbElegida1.getClienteDAO(db1);
             FacturaDb1=dbElegida1.getFacturaDAO(db1);
             ProductoDb1=dbElegida1.getProductoDAO(db1);
@@ -51,10 +52,10 @@ public class Main {
 
             //se cargan los datos  !SE DEBEN CARGAR LOS DATOS SOLO LA PRIMERA VEZ
 
-            //ClienteDb1.parserDatos(parserClientes, db1);
-            //FacturaDb1.parserDatos(parserFacturas, db1); 
-            //ProductoDb1.parserDatos(parserProducto, db1);
-            //Factura_ProductoDb1.parserDatos(parserFactura_producto, db1);
+            ClienteDb1.parserDatos(parserClientes, db1);
+            FacturaDb1.parserDatos(parserFacturas, db1); 
+            ProductoDb1.parserDatos(parserProducto, db1);
+            Factura_ProductoDb1.parserDatos(parserFactura_producto, db1);
             
 
             System.out.println("*********************CLIENTES**********************************");
@@ -63,6 +64,9 @@ public class Main {
             System.out.println("*********************PRODUCTOS**********************************");
             System.out.println(" Productos db "+ db1 + ProductoDb1.obtenerProductoConMasRecaudacion(db1));
            
+
+
+            
             DAOFactory dbElegida2 = DAOFactory.getDAOFactory(db2);
 
             //se crean las tablas
@@ -72,10 +76,10 @@ public class Main {
             Factura_ProductoDb2=dbElegida2.getFactura_ProductoDAO(db2);
 
             //se cargan los datos  !SE DEBEN CARGAR LOS DATOS SOLO LA PRIMERA VEZ
-            //ClienteDb2.parserDatos(parserClientes, db2);
-            //FacturaDb2.parserDatos(parserFacturas, db2);
-            // ProductoDb2.parserDatos(parserProducto, db2);
-            //Factura_ProductoDb2.parserDatos(parserFactura_producto, db2);
+            ClienteDb2.parserDatos(parserClientes, db2);
+            FacturaDb2.parserDatos(parserFacturas, db2);
+            ProductoDb2.parserDatos(parserProducto, db2);
+            Factura_ProductoDb2.parserDatos(parserFactura_producto, db2);
             
 
             System.out.println("*********************CLIENTES**********************************");

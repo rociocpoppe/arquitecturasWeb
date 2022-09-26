@@ -46,7 +46,7 @@ public class Factura_ProductoDao implements DAO<Factura_ProductoDao> {
 				this.conn.close();
 			break;
 			case DERBY_DB:
-				this.conn = MySqlDB.crearConeccion();
+				this.conn = DerbyDB.crearConeccion();
 				java.sql.DatabaseMetaData dbmd = this.conn.getMetaData();
 				ResultSet rs1 = dbmd.getTables(null, null, "producto",null);
 				if(rs1.next())

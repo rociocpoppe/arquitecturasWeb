@@ -16,7 +16,7 @@ public class DerbyDB extends DAOFactory {
 	public static final String URI = "jdbc:derby:MyDerbyDb;create=true";
 
 	public DerbyDB() {
-		this.registrarDriver();
+		registrarDriver();
 	}
 
 	private static void registrarDriver() {
